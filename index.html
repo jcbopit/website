@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Epicycle Terminal</title>
+
+  <!-- Fonts & KaTeX -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+
+  <!-- p5.js -->
+  <script src="libraries/p5.min.js"></script>
+  <script src="libraries/p5.sound.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      background: #000;
+      color: #00ffcc;
+    }
+
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #050505;
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+      z-index: 1000;
+      border-bottom: 1px solid #00ff5a33;
+    }
+
+    #navbar a {
+      color: #66ffb2;
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    #navbar a:hover {
+      color: #00ffff;
+    }
+
+    #equation {
+      position: absolute;
+      top: 10vh;
+      left: 2vw;
+      font-size: 1rem;
+      color: #00ffcc;
+      z-index: 6;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    #animation-dimmer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: transparent;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    #about-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease;
+      z-index: 10;
+    }
+
+    #about-overlay img {
+      width: 140px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 1px solid #00ffcc;
+      opacity: 0.95;
+    }
+
+    #about-overlay p {
+      max-width: 480px;
+      font-size: 1.1rem;
+      text-align: center;
+      color: #b0ffcc;
+      margin: 0;
+    }
+
+    #continue-btn {
+      margin-top: 2rem;
+      padding: 0.6rem 1.3rem;
+      font-size: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #continue-btn:hover {
+      background-color: #00bfa5;
+    }
+
+    #metrics-panel {
+  position: fixed;
+  bottom: 10px;
+  left: 12px;
+  background: black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #00ffcc;
+  display: flex;
+  gap: 14px;
+  z-index: 5;
+  line-height: 1.2;
+  pointer-events: none;
+  box-shadow: 0 0 8px #00ffcc33;
+}
+
+.metric {
+  display: flex;
+  gap: 4px;
+}
+
+.value.positive {
+  color: #00ff88;
+  animation: pulseGreen 1s infinite alternate;
+}
+
+.value.negative {
+  color: #ff4d4d;
+  animation: pulseRed 1s infinite alternate;
+}
+
+#spark {
+  position: fixed;
+  bottom: 38px;
+  left: 12px;
+  height: 25px;
+  width: 300px;
+  background: black;
+  z-index: 4;
+  pointer-events: none;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="navbar">
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="github.html">GitHub</a>
+    <a href="cv.html">CV</a>
+    <a href="posts.html">Posts</a>
+  </div>
+
+  <div id="equation"></div>
+  <main id="animation"></main>
+  <canvas id="spark"></canvas>
+
+  <div id="metrics-panel">
+    <div class="metric"><span class="label">R:</span><span id="metric-radius">--</span></div>
+    <div class="metric"><span class="label">V:</span><span id="metric-velocity">--</span></div>
+    <div class="metric"><span class="label">ΔV:</span><span id="metric-delta">--</span></div>
+    <div class="metric"><span class="label">t:</span><span id="metric-t">--</span></div>
+  </div>
+
+  <div id="animation-dimmer"></div>
+
+  <div id="about-overlay">
+    <img src="1000017195 (2).png" alt="My Face" />
+    <p>
+      Hi, I’m Justin 👋<br />
+      I’m a Sophomore at Indiana University pursuing a B.S. in Theoretical Physics, Pure Mathematics, and a Minor in Computer Science.
+      I grew up across Asia—living in Shanghai, Hong Kong, and Indonesia—and studied at international schools, which shaped my interdisciplinary perspective.
+      My goal is to pursue graduate studies in math and transition into quantitative finance.
+    </p>
+    <button id="continue-btn">Continue</button>
+  </div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>

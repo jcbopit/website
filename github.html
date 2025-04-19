@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GitHub Projects – jcbopit</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 60px;
+      font-family: 'JetBrains Mono', monospace;
+      background: #000000;
+      color: #e0ffe0;
+      line-height: 1.5;
+    }
+
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #0a0a0a;
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+      z-index: 1000;
+      border-bottom: 1px solid #00ff5a22;
+    }
+
+    #navbar a {
+      color: #66ffb2;
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    #navbar a:hover {
+      color: #00ffff;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .profile-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .profile-section img {
+      width: 130px;
+      border-radius: 50%;
+      border: 2px solid #00ffcc;
+    }
+
+    .profile-text h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #00ffcc;
+    }
+
+    .profile-text p {
+      margin: 0.4rem 0;
+      color: #b0ffcc;
+    }
+
+    h1, h2 {
+      color: #66ffb2;
+    }
+
+    .repo-card {
+      border: 1px solid #00ff5a22;
+      border-radius: 8px;
+      padding: 1.2rem;
+      background: #0f0f0f;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 1px 4px rgba(0,255,120,0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .repo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0, 255, 120, 0.08);
+    }
+
+    .repo-card h3 {
+      margin: 0 0 0.4rem 0;
+      font-size: 1.2rem;
+    }
+
+    .repo-card a {
+      text-decoration: none;
+      color: #00ffcc;
+    }
+
+    .repo-card p {
+      margin: 0 0 0.8rem 0;
+      color: #99ffaa;
+    }
+
+    .repo-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #80ffc0;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    #contributions {
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    #contributions img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid #00ffcc22;
+      filter: invert(0.95) hue-rotate(90deg) brightness(1.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar">
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="github.html">GitHub</a>
+    <a href="cv.html">CV</a>
+    <a href="posts.html">Posts</a>
+  </div>
+
+  <main>
+    <section class="profile-section">
+      <img id="profile-pic" src="" alt="GitHub Avatar" />
+      <div class="profile-text">
+        <h2 id="github-name">GitHub Profile</h2>
+        <p id="github-bio">Loading bio...</p>
+        <p>
+          <strong id="repo-count">0</strong> repositories —
+          <strong id="followers">0</strong> followers
+        </p>
+        <a href="https://github.com/jcbopit" target="_blank" style="color: #00ffff;">Visit GitHub →</a>
+      </div>
+    </section>
+
+    <h1>GitHub Projects</h1>
+    <div id="repo-list">Loading repositories...</div>
+
+    <div id="contributions">
+      <h2>Contribution Activity</h2>
+      <img src="https://ghchart.rshah.org/jcbopit" alt="GitHub Contribution Graph">
+    </div>
+  </main>
+
+  <script>
+    async function loadProfileAndRepos() {
+      const username = "jcbopit";
+
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        const user = await res.json();
+
+        document.getElementById("profile-pic").src = user.avatar_url;
+        document.getElementById("github-name").textContent = user.name || username;
+        document.getElementById("github-bio").textContent = user.bio || "GitHub user";
+        document.getElementById("repo-count").textContent = user.public_repos;
+        document.getElementById("followers").textContent = user.followers;
+
+        const repoRes = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+        const data = await repoRes.json();
+        const container = document.getElementById("repo-list");
+        container.innerHTML = "";
+
+        const languageColors = {
+          JavaScript: "#f1e05a",
+          Python: "#3572A5",
+          HTML: "#e34c26",
+          CSS: "#563d7c",
+          C: "#555555",
+          "C++": "#f34b7d",
+          Java: "#b07219",
+          TypeScript: "#2b7489"
+        };
+
+        data.slice(0, 6).forEach(repo => {
+          const lang = repo.language;
+          const color = languageColors[lang] || "#ccc";
+
+          const card = document.createElement("div");
+          card.className = "repo-card";
+
+          card.innerHTML = `
+            <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+            <p>${repo.description || ""}</p>
+            <div class="repo-meta">
+              ${lang ? `<span><span class="dot" style="background:${color}"></span>${lang}</span>` : ""}
+              <span>⭐ ${repo.stargazers_count}</span>
+              <span>🍴 ${repo.forks_count}</span>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error("GitHub API error:", error);
+        document.getElementById("repo-list").textContent = "Failed to load repositories.";
+      }
+    }
+
+    window.onload = loadProfileAndRepos;
+  </script>
+</body>
+</html>

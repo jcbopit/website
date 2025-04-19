@@ -1,0 +1,134 @@
+
+:root {
+  --bg: #0d1117;
+  --text: #e6edf3;
+  --accent: #00bfff;
+  --card-bg: #161b22;
+  --border: #30363d;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Navbar */
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  z-index: 1000;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+#navbar a {
+  color: var(--text);
+  text-decoration: none;
+  font-family: 'Manrope', sans-serif;
+  margin: 0 15px;
+  font-weight: 500;
+  font-size: calc(1rem + 0.5vw);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+#navbar a:hover {
+  color: var(--accent);
+}
+
+/* Canvas container */
+main {
+  display: block;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* Equation */
+#equation {
+  position: absolute;
+  top: 10vh;
+  left: 2vw;
+  font-size: calc(0.9rem + 0.5vw);
+  color: var(--text);
+  z-index: 6;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* About overlay */
+#about-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(13, 17, 23, 0.8);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  z-index: 5;
+}
+#about-overlay img {
+  width: 140px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  transform: scale(0.95);
+  border: 1px solid var(--text);
+  animation: fadeSlide 1s ease-out 0.5s forwards;
+}
+#about-overlay p {
+  opacity: 0;
+  transform: translateY(10px);
+  max-width: 440px;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--text);
+  animation: fadeSlide 1s ease-out 0.9s forwards;
+}
+#continue-btn {
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-family: 'Manrope', sans-serif;
+  background-color: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeSlide 1s ease-out 1.3s forwards;
+  transition: background-color 0.3s ease;
+}
+#continue-btn:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* Fade + slide animation */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
