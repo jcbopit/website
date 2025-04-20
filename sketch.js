@@ -12,12 +12,24 @@ let continueClicked = false;
 
 let sparkCanvas, sparkCtx;
 
+// Smooth transition variables
+let cameraTransitioningToStatic = false;
+let staticTransitionStartTime = 0;
+let cameraTransitionDuration = 3000;
+let cameraIsNowStatic = false;
+let staticCameraScale = 1.5;
+let staticCameraX = 0;
+let staticCameraY = 0;
+let currentCameraX = 0;
+let currentCameraY = 0;
+let currentCameraScale = 20;
+
 function setup() {
   const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("animation");
   canvas.style("z-index", "0");
   colorMode(HSB, 360, 100, 100, 100);
-  strokeWeight(2.5); // Thicker lines
+  strokeWeight(2.5);
   noFill();
 
   document.getElementById("continue-btn").addEventListener("click", () => {
@@ -63,19 +75,41 @@ function draw() {
   push();
   translate(width / 2, height / 2);
 
-  if (!hasSnapped) {
+  if (!hasSnapped && !cameraTransitioningToStatic) {
     cameraScale = lerp(cameraScale, targetScale, transitionSpeed);
     scale(cameraScale);
     translate(-x, -y);
     if (abs(cameraScale - targetScale) < 0.1) {
+      currentCameraScale = cameraScale;
+      currentCameraX = x;
+      currentCameraY = y;
+      staticTransitionStartTime = millis();
+      cameraTransitioningToStatic = true;
+    }
+  } else if (cameraTransitioningToStatic) {
+    const elapsed = millis() - staticTransitionStartTime;
+    const progress = constrain(elapsed / cameraTransitionDuration, 0, 1);
+    const ease = 1 - pow(1 - progress, 3); // Cubic ease-out
+
+    const camX = lerp(currentCameraX, staticCameraX, ease);
+    const camY = lerp(currentCameraY, staticCameraY, ease);
+    cameraScale = lerp(currentCameraScale, staticCameraScale, ease);
+
+    scale(cameraScale);
+    translate(-camX, -camY);
+
+    if (progress >= 1) {
+      cameraTransitioningToStatic = false;
       hasSnapped = true;
       if (!aboutShown) {
-        showAboutOverlay();
-        aboutShown = true;
+        setTimeout(() => {
+          showAboutOverlay();
+          aboutShown = true;
+        }, 300);
       }
     }
   } else {
-    scale(targetScale);
+    scale(staticCameraScale);
     translate(continueClicked ? -x : 0, continueClicked ? -y : 0);
   }
 
@@ -87,26 +121,25 @@ function draw() {
     const freq = pow(Math.E, i) * freqBase;
     const amp = baseAmp * pow(0.5, i);
     const angle = freq * t * TWO_PI + phase;
-  
+
     prevX = x;
     prevY = y;
     x += amp * cos(angle);
     y += amp * sin(angle);
-  
+
     const hue = map(i, 0, numLayers - 1, 100, 160);
-  
+
     stroke(hue, 80, 100);
-    strokeWeight(2.5); // Thicker circle
+    strokeWeight(2.5);
     noFill();
     ellipse(prevX, prevY, amp * 2);
-  
-    strokeWeight(1.5); // Reset for line
+
+    strokeWeight(1.5);
     stroke(hue, 90, 100);
     line(prevX, prevY, x, y);
-  
+
     drawArrow(prevX, prevY, x, y, amp * 0.1, hue);
   }
-  
 
   noFill();
   beginShape();
@@ -119,7 +152,7 @@ function draw() {
   endShape();
   pop();
 
-  t += 0.00015;
+  t += 0.00035;
 
   updateMetrics(velocity, delta);
   renderEquation();
@@ -203,8 +236,9 @@ function renderEquation() {
 }
 
 function showAboutOverlay() {
-  document.getElementById("about-overlay").style.opacity = "1";
-  document.getElementById("about-overlay").style.pointerEvents = "auto";
+  const overlay = document.getElementById("about-overlay");
+  overlay.style.opacity = "1";
+  overlay.style.pointerEvents = "auto";
   document.getElementById("equation").style.opacity = "0";
 }
 
