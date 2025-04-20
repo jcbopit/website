@@ -14,8 +14,8 @@
       margin: 0;
       padding-top: 80px;
       font-family: 'JetBrains Mono', monospace;
-      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
-      color: #ffeedd;
+      background: radial-gradient(ellipse at center, #001220 0%, #000000 100%);
+      color: #ddfaff;
       line-height: 1.5;
       overflow-x: hidden;
     }
@@ -25,52 +25,52 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(10, 5, 0, 0.9);
+      background: rgba(0, 10, 30, 0.9);
       display: flex;
       justify-content: center;
       align-items: center;
       gap: clamp(1rem, 4vw, 2.5rem);
       padding: 16px 0;
       z-index: 1000;
-      border-bottom: 2px solid rgba(255, 100, 50, 0.4);
-      box-shadow: 0 0 14px rgba(255, 80, 30, 0.4);
+      border-bottom: 2px solid rgba(102, 204, 255, 0.4);
+      box-shadow: 0 0 14px rgba(51, 160, 255, 0.3);
       backdrop-filter: blur(6px);
       animation: glowPulse 4s infinite ease-in-out;
       flex-wrap: wrap;
     }
 
     #navbar a {
-      color: #ffaa66;
+      color: #66ccff;
       text-decoration: none;
       font-size: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
       font-weight: 800;
-      text-shadow: 0 0 5px #ff5500;
+      text-shadow: 0 0 5px #33bbff;
       transition: color 0.3s ease, text-shadow 0.3s ease;
       white-space: nowrap;
     }
 
     #navbar a:hover {
       color: #ffffff;
-      text-shadow: 0 0 10px #ffaa66, 0 0 22px #ff6600;
+      text-shadow: 0 0 10px #aaddff, 0 0 22px #66ccff;
     }
 
     @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 14px rgba(255, 80, 30, 0.4); }
-      50% { box-shadow: 0 0 28px rgba(255, 160, 80, 0.75); }
+      0%, 100% { box-shadow: 0 0 14px rgba(51, 160, 255, 0.3); }
+      50% { box-shadow: 0 0 28px rgba(102, 220, 255, 0.75); }
     }
 
     h1, h2 {
-      color: #ffbb66;
-      text-shadow: 0 0 6px rgba(255, 140, 40, 0.8);
+      color: #aaddff;
+      text-shadow: 0 0 6px rgba(102, 220, 255, 0.8);
       animation: flicker 2.5s infinite;
     }
 
     @keyframes flicker {
-      0% { opacity: 0.95; text-shadow: 0 0 5px #ff9933; }
-      25% { opacity: 1; text-shadow: 0 0 8px #ffcc66; }
-      50% { opacity: 0.92; text-shadow: 0 0 6px #ff7733; }
-      75% { opacity: 0.98; text-shadow: 0 0 8px #ffaa55; }
-      100% { opacity: 1; text-shadow: 0 0 9px #ffbb66; }
+      0% { opacity: 0.95; text-shadow: 0 0 5px #88dfff; }
+      25% { opacity: 1; text-shadow: 0 0 8px #aaddff; }
+      50% { opacity: 0.92; text-shadow: 0 0 6px #66ccff; }
+      75% { opacity: 0.98; text-shadow: 0 0 8px #99eeff; }
+      100% { opacity: 1; text-shadow: 0 0 9px #bbf0ff; }
     }
 
     main {
@@ -90,8 +90,8 @@
     .profile-section img {
       width: 130px;
       border-radius: 50%;
-      border: 3px solid #ffaa44;
-      box-shadow: 0 0 15px #ff6600;
+      border: 3px solid #66ccff;
+      box-shadow: 0 0 15px #33bbff;
     }
 
     .profile-text {
@@ -101,27 +101,27 @@
     .profile-text h2 {
       margin: 0;
       font-size: clamp(1.2rem, 2vw + 0.3rem, 1.6rem);
-      color: #ffcc99;
+      color: #ccf0ff;
     }
 
     .profile-text p {
       margin: 0.4rem 0;
-      color: #ffd7aa;
+      color: #d7f9ff;
     }
 
     .repo-card {
-      border: 1px solid #ff8c0022;
+      border: 1px solid #66ccff33;
       border-radius: 10px;
       padding: 1.3rem;
-      background: rgba(20, 10, 0, 0.75);
-      box-shadow: 0 2px 10px rgba(255, 90, 20, 0.15);
+      background: rgba(0, 20, 40, 0.75);
+      box-shadow: 0 2px 10px rgba(102, 204, 255, 0.2);
       margin-bottom: 1.7rem;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .repo-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 6px 20px rgba(255, 120, 40, 0.3);
+      box-shadow: 0 6px 20px rgba(102, 204, 255, 0.3);
     }
 
     .repo-card h3 {
@@ -131,12 +131,12 @@
 
     .repo-card a {
       text-decoration: none;
-      color: #ffb366;
+      color: #99ddff;
     }
 
     .repo-card p {
       margin: 0 0 0.8rem;
-      color: #ffcfa3;
+      color: #cfefff;
     }
 
     .repo-meta {
@@ -145,7 +145,7 @@
       flex-wrap: wrap;
       gap: 1rem;
       font-size: 0.9rem;
-      color: #ffd699;
+      color: #b3e7ff;
     }
 
     .dot {
@@ -164,9 +164,9 @@
     #contributions img {
       max-width: 100%;
       border-radius: 8px;
-      border: 1px solid #ffb96644;
-      filter: invert(0.9) hue-rotate(30deg) brightness(1.1);
-      box-shadow: 0 0 10px rgba(255, 120, 30, 0.2);
+      border: 1px solid #66ccff44;
+      filter: invert(0.9) hue-rotate(160deg) brightness(1.1);
+      box-shadow: 0 0 10px rgba(102, 204, 255, 0.2);
     }
 
     @media (max-width: 600px) {
@@ -210,7 +210,7 @@
           <strong id="repo-count">0</strong> repositories — 
           <strong id="followers">0</strong> followers
         </p>
-        <a href="https://github.com/jcbopit" target="_blank" style="color: #ffaa66;">Visit GitHub →</a>
+        <a href="https://github.com/jcbopit" target="_blank" style="color: #99ddff;">Visit GitHub →</a>
       </div>
     </section>
 

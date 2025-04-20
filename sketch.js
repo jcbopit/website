@@ -132,7 +132,7 @@ function draw() {
 
   for (let p of positions) {
     drawingContext.shadowBlur = 20;
-    drawingContext.shadowColor = 'white';
+    drawingContext.shadowColor = color(0, 0, 100);
     stroke(0, 0, 100);
     strokeWeight(isMobile ? 2.5 : 4);
     ellipse(p.prevX, p.prevY, p.amp * 2);
@@ -144,7 +144,7 @@ function draw() {
   }
 
   if (!usingIntroAnimation) {
-    const numParticles = isMobile ? 2 : 4;
+    const numParticles = isMobile ? 3 : 5;
     for (let i = 0; i < numParticles; i++) flameParticles.push(new FlameParticle(x, y));
   }
 
@@ -183,8 +183,8 @@ function drawParallaxStars() {
     const offsetX = (currentCameraX || 0) * star.depth;
     const offsetY = (currentCameraY || 0) * star.depth;
     drawingContext.shadowBlur = 8;
-    drawingContext.shadowColor = color(0, 0, 100, 90);
-    fill(random(0, 40), 50, 100, random(60, 100));
+    drawingContext.shadowColor = color(0, 0, 100);
+    fill(random(190, 230), 70, 100, random(60, 100));
     noStroke();
     ellipse(star.x - offsetX, star.y - offsetY, star.size);
     drawingContext.shadowBlur = 0;
@@ -207,7 +207,7 @@ class NebulaParticle {
     this.x = random(-width, width);
     this.y = random(-height, height);
     this.r = random(30, 150);
-    this.hue = random(10, 60);
+    this.hue = random(190, 240);
     this.alpha = random(4, 10);
     this.dx = random(-0.3, 0.3);
     this.dy = random(-0.3, 0.3);
@@ -218,9 +218,9 @@ class NebulaParticle {
   }
   display() {
     drawingContext.shadowBlur = 60;
-    drawingContext.shadowColor = color(this.hue, 80, 80, this.alpha);
+    drawingContext.shadowColor = color(this.hue, 80, 100, this.alpha);
     noStroke();
-    fill(this.hue, 80, 80, this.alpha);
+    fill(this.hue, 80, 100, this.alpha);
     ellipse(this.x, this.y, this.r);
     drawingContext.shadowBlur = 0;
   }
@@ -230,9 +230,11 @@ class FlameParticle {
   constructor(x, y) {
     this.pos = createVector(x, y);
     this.vel = p5.Vector.random2D().mult(random(0.4, 1.1));
-    this.lifespan = isMobile ? 30 : 50;
+    this.lifespan = isMobile ? 25 : 40;
     this.size = random(3, 5);
-    this.hue = random(15, 45);
+    const hues = [0, 210, 220]; // white, light blue, dark blue
+    this.hue = hues[floor(random(hues.length))];
+    this.sat = this.hue === 0 ? 0 : 100;
   }
   update() {
     this.pos.add(this.vel);
@@ -241,9 +243,9 @@ class FlameParticle {
   }
   display() {
     drawingContext.shadowBlur = 30;
-    drawingContext.shadowColor = color(this.hue, 100, 100);
+    drawingContext.shadowColor = color(this.hue, this.sat, 100);
     noStroke();
-    fill(this.hue, 100, 100, this.lifespan);
+    fill(this.hue, this.sat, 100, this.lifespan);
     ellipse(this.pos.x, this.pos.y, this.size);
     drawingContext.shadowBlur = 0;
   }
@@ -283,8 +285,8 @@ class Boid {
 
   show() {
     drawingContext.shadowBlur = 25;
-    drawingContext.shadowColor = color(60, 100, 100);
-    fill(60, 100, 100);
+    drawingContext.shadowColor = color(200, 15, 100);
+    fill(200, 10, 100);
     noStroke();
     ellipse(this.position.x, this.position.y, 4);
     drawingContext.shadowBlur = 0;
@@ -297,7 +299,7 @@ function drawArrow(x1, y1, x2, y2, size) {
   translate(x2, y2);
   rotate(angle);
   drawingContext.shadowBlur = 15;
-  drawingContext.shadowColor = 'white';
+  drawingContext.shadowColor = color(0, 0, 100);
   fill(0, 0, 100);
   noStroke();
   triangle(0, 0, -size, size / 2, -size, -size / 2);

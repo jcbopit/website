@@ -1,10 +1,10 @@
 :root {
-  --bg: #0a0a0a;
-  --text: #ffeedd;
-  --accent: #ffaa44;
-  --card-bg: #161b22;
-  --border: #ff8844;
-  --glow: #ff5500;
+  --bg: #000a14;
+  --text: #e6faff;
+  --accent: #66ccff;
+  --card-bg: #0b1826;
+  --border: #33bbff;
+  --glow: #33bbff;
 }
 
 /* Global Reset + Background */
@@ -14,7 +14,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'JetBrains Mono', monospace;
-  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+  background: radial-gradient(ellipse at center, #000a14 0%, #000000 100%);
   color: var(--text);
 }
 
@@ -24,36 +24,40 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(0, 20, 40, 0.95);
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   padding: 14px 0;
   z-index: 1000;
-  border-bottom: 2px solid rgba(255, 90, 20, 0.5);
-  box-shadow: 0 0 18px rgba(255, 90, 30, 0.35);
+  border-bottom: 2px solid rgba(102, 204, 255, 0.5);
+  box-shadow: 0 0 18px rgba(51, 187, 255, 0.4);
   backdrop-filter: blur(6px);
   animation: glowPulse 4s infinite ease-in-out;
 }
+
 #navbar a {
   color: var(--accent);
   text-decoration: none;
-  margin: 0 22px;
-  font-size: calc(1rem + 0.4vw);
+  margin: 0 18px;
+  font-size: calc(0.9rem + 0.5vw);
   font-weight: 800;
   text-shadow: 0 0 6px var(--glow);
   transition: color 0.3s ease, text-shadow 0.3s ease;
   white-space: nowrap;
 }
+
 #navbar a:hover {
   color: white;
-  text-shadow: 0 0 10px #ffaa66, 0 0 20px #ff6600;
+  text-shadow: 0 0 10px #aaddff, 0 0 20px #66ccff;
 }
+
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(255, 60, 20, 0.4);
+    box-shadow: 0 0 16px rgba(51, 160, 255, 0.3);
   }
   50% {
-    box-shadow: 0 0 32px rgba(255, 140, 60, 0.75);
+    box-shadow: 0 0 32px rgba(102, 220, 255, 0.75);
   }
 }
 
@@ -74,20 +78,21 @@ main {
 #equation {
   position: absolute;
   top: 10vh;
-  left: 2vw;
-  font-size: calc(1rem + 0.4vw);
+  left: 4vw;
+  font-size: clamp(1rem, 1.5vw + 0.5rem, 1.6rem);
   color: var(--text);
   z-index: 6;
   opacity: 0;
   transition: opacity 2s ease;
-  text-shadow: 0 0 4px rgba(255, 180, 90, 0.7), 0 0 6px rgba(255, 120, 50, 0.5);
+  text-shadow: 0 0 4px #88dfff, 0 0 6px #55ccff;
   animation: flicker 2.5s infinite;
 }
+
 @keyframes flicker {
-  0%, 100% { opacity: 0.95; text-shadow: 0 0 4px #ff9933; }
-  25% { opacity: 1; text-shadow: 0 0 6px #ffcc66; }
-  50% { opacity: 0.92; text-shadow: 0 0 5px #ff7733; }
-  75% { opacity: 0.98; text-shadow: 0 0 6px #ffaa55; }
+  0%, 100% { opacity: 0.95; text-shadow: 0 0 4px #88dfff; }
+  25% { opacity: 1; text-shadow: 0 0 6px #aaddff; }
+  50% { opacity: 0.92; text-shadow: 0 0 5px #66ccff; }
+  75% { opacity: 0.98; text-shadow: 0 0 6px #99eeff; }
 }
 
 /* About overlay */
@@ -101,33 +106,39 @@ main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgba(10, 0, 0, 0.7);
+  background-color: rgba(0, 10, 30, 0.7);
   backdrop-filter: blur(7px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 2s ease;
   z-index: 5;
+  padding: 1rem;
+  text-align: center;
 }
+
 #about-overlay img {
-  width: 140px;
+  width: clamp(90px, 20vw, 120px);
   border-radius: 50%;
   margin-bottom: 1rem;
   opacity: 0.92;
   transform: scale(0.95);
-  border: 4px solid #ffaa44;
-  box-shadow: 0 0 24px #ff6600;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 24px #33bbff;
   animation: fadeSlide 1s ease-out 0.5s forwards;
 }
+
 #about-overlay p {
   opacity: 0;
   transform: translateY(10px);
-  max-width: 480px;
-  font-size: 1.1rem;
-  text-align: center;
+  max-width: 90vw;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   color: var(--text);
-  text-shadow: 0 0 4px #ffcc99;
+  line-height: 1.55;
+  text-shadow: 0 0 4px #aaddff;
   animation: fadeSlide 1s ease-out 0.9s forwards;
+  white-space: pre-wrap;
 }
+
 #continue-btn {
   margin-top: 2rem;
   padding: 0.6rem 1.3rem;
@@ -142,10 +153,12 @@ main {
   animation: fadeSlide 1s ease-out 1.3s forwards;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 #continue-btn:hover {
-  background-color: #ff6600;
+  background-color: #33bbff;
   color: #fff;
 }
+
 @keyframes fadeSlide {
   to {
     opacity: 1;
@@ -166,4 +179,26 @@ body.show-metrics #spark {
   display: flex;
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Mobile Padding Fix */
+@media (max-width: 600px) {
+  #navbar {
+    flex-wrap: wrap;
+    padding: 10px 5px;
+  }
+
+  #navbar a {
+    margin: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  #equation {
+    top: 8vh;
+    left: 5vw;
+  }
+
+  #about-overlay p {
+    padding: 0 1rem;
+  }
 }
