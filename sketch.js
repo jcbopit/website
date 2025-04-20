@@ -28,7 +28,8 @@ let currentCameraScale = 20;
 let isMobile = false;
 
 function setup() {
-  isMobile = windowWidth < 600; 
+  isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent) || windowWidth < 768;
+
   const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("animation");
   canvas.style("z-index", "0");
