@@ -12,10 +12,10 @@
 
     body {
       margin: 0;
-      padding-top: 60px;
+      padding-top: 80px;
       font-family: 'JetBrains Mono', monospace;
-      background: #000;
-      color: #e0ffe0;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+      color: #ffeedd;
       line-height: 1.5;
     }
 
@@ -24,53 +24,60 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #050505;
+      background: rgba(10, 5, 0, 0.9);
       display: flex;
       justify-content: center;
-      padding: 12px 0;
+      padding: 16px 0;
       z-index: 1000;
-      border-bottom: 1px solid #00ff5a33;
+      border-bottom: 2px solid rgba(255, 100, 50, 0.4);
+      box-shadow: 0 0 14px rgba(255, 80, 30, 0.4);
+      backdrop-filter: blur(6px);
+      animation: glowPulse 4s infinite ease-in-out;
     }
 
     #navbar a {
-      color: #66ffb2;
+      color: #ffaa66;
       text-decoration: none;
-      margin: 0 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+      margin: 0 22px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-shadow: 0 0 5px #ff5500;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     #navbar a:hover {
-      color: #00ffff;
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffaa66, 0 0 22px #ff6600;
     }
 
-    @media (max-width: 600px) {
-      #navbar {
-        justify-content: space-around;
-        padding: 10px;
-      }
-
-      #navbar a {
-        margin: 0 10px;
-        font-size: clamp(0.75rem, 4vw, 0.9rem);
-      }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 14px rgba(255, 80, 30, 0.4); }
+      50% { box-shadow: 0 0 28px rgba(255, 160, 80, 0.75); }
     }
 
     main {
       padding: 2rem;
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
     }
 
     h1 {
-      color: #66ffb2;
-      margin-bottom: 1.5rem;
+      color: #ffbb66;
+      text-shadow: 0 0 6px rgba(255, 140, 40, 0.8);
+      animation: flicker 2.5s infinite;
+      margin-bottom: 1.8rem;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.95; text-shadow: 0 0 5px #ff9933; }
+      25% { opacity: 1; text-shadow: 0 0 8px #ffcc66; }
+      50% { opacity: 0.92; text-shadow: 0 0 6px #ff7733; }
+      75% { opacity: 0.98; text-shadow: 0 0 8px #ffaa55; }
+      100% { opacity: 1; text-shadow: 0 0 9px #ffbb66; }
     }
 
     p {
-      color: #b0ffcc;
+      color: #ffd7aa;
     }
   </style>
 </head>
@@ -86,7 +93,7 @@
 
   <main>
     <h1>Posts</h1>
-    <p>This is the posts page.</p>
+    <p>This is the posts page. Soon this will include writing, notes, and longer thoughts.</p>
   </main>
 </body>
 </html>

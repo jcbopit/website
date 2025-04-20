@@ -6,13 +6,13 @@
   <title>Curriculum Vitae – jcbopit</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
+    html, body {
       margin: 0;
-      padding-top: 60px;
+      padding-top: 70px;
       font-family: 'JetBrains Mono', monospace;
-      background: #000;
-      color: #e0ffe0;
-      line-height: 1.5;
+      background: radial-gradient(ellipse at center, #060606 0%, #000000 100%);
+      color: #ffeccc;
+      overflow-x: hidden;
     }
 
     #navbar {
@@ -20,67 +20,83 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #050505;
+      background: rgba(10, 10, 10, 0.85);
       display: flex;
       justify-content: center;
-      padding: 12px 0;
+      padding: 14px 0;
       z-index: 1000;
-      border-bottom: 1px solid #00ff5a33;
-      box-sizing: border-box;
+      border-bottom: 2px solid rgba(255, 80, 0, 0.4);
+      box-shadow: 0 0 18px rgba(255, 60, 0, 0.4);
+      backdrop-filter: blur(6px);
+      animation: glowPulse 4s infinite ease-in-out;
     }
 
     #navbar a {
-      color: #66ffb2;
+      color: #ffaa66;
       text-decoration: none;
-      margin: 0 20px;
+      margin: 0 22px;
       font-size: 1rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+      font-weight: 800;
+      text-shadow: 0 0 6px #ff5500;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     #navbar a:hover {
-      color: #00ffff;
+      color: #fff6cc;
+      text-shadow: 0 0 10px #ffaa66, 0 0 20px #ff6600;
     }
 
-    @media (max-width: 600px) {
-      #navbar {
-        justify-content: space-around;
-        padding: 10px;
-        overflow: hidden;
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow: 0 0 18px rgba(255, 50, 0, 0.3);
       }
-
-      #navbar a {
-        margin: 0 10px;
-        font-size: clamp(0.75rem, 4vw, 0.9rem);
+      50% {
+        box-shadow: 0 0 30px rgba(255, 130, 60, 0.8);
       }
     }
 
     main {
       padding: 2rem;
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
+      color: #ffddbb;
+      text-shadow: 0 0 3px #ff7733;
     }
 
     h1 {
-      color: #66ffb2;
+      color: #ffae66;
       margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1.8rem;
     }
 
     p {
-      color: #b0ffcc;
+      color: #ffddb3;
     }
 
     iframe {
       width: 100%;
       height: 800px;
-      border: 2px solid #00ffcc22;
-      border-radius: 6px;
+      border: 2px solid #ffaa5522;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 100, 0, 0.3);
+      background-color: #111;
     }
 
     @media (max-width: 768px) {
       iframe {
         height: 600px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #navbar a {
+        margin: 0 12px;
+        font-size: 0.85rem;
+      }
+
+      main {
+        padding: 1rem;
       }
     }
   </style>
@@ -97,7 +113,7 @@
 
   <main>
     <h1>Curriculum Vitae</h1>
-    <iframe src="CV.pdf"></iframe>
+    <iframe src="CV.pdf" title="CV PDF"></iframe>
   </main>
 </body>
 </html>

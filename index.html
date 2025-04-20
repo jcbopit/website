@@ -6,7 +6,7 @@
   <title>Epicycle Terminal</title>
 
   <!-- Fonts & KaTeX -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
 
@@ -15,11 +15,22 @@
   <script src="libraries/p5.sound.min.js"></script>
 
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: 'JetBrains Mono', monospace;
+      padding: 0;
+      overflow: hidden;
       background: #000;
-      color: #00ffcc;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff5e6;
+    }
+
+    main#animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
     }
 
     #navbar {
@@ -27,63 +38,53 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #050505;
+      padding: 16px 0;
+      z-index: 1000;
       display: flex;
       justify-content: center;
-      padding: 12px 0;
-      z-index: 1000;
-      border-bottom: 1px solid #00ff5a33;
-      box-sizing: border-box;
+      background: rgba(20, 0, 0, 0.85);
+      border-bottom: 2px solid #ff5e00;
+      box-shadow: 0 0 20px #ff3c00, 0 0 60px #ff7a00;
+      backdrop-filter: blur(6px);
+      animation: navbarGlow 6s ease-in-out infinite;
     }
 
     #navbar a {
-      color: #66ffb2;
+      color: #ffaa66;
       text-decoration: none;
-      margin: 0 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+      margin: 0 25px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-shadow: 0 0 6px #ff4d00, 0 0 12px #ff6600;
+      transition: all 0.3s ease;
     }
 
     #navbar a:hover {
-      color: #00ffff;
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffaa66, 0 0 25px #ff9900;
     }
 
-    @media (max-width: 600px) {
-      #navbar {
-        justify-content: space-around;
-        padding: 10px;
-        overflow: hidden;
-      }
-
-      #navbar a {
-        margin: 0 10px;
-        font-size: clamp(0.75rem, 4vw, 0.9rem);
-      }
+    @keyframes navbarGlow {
+      0%, 100% { box-shadow: 0 0 20px #ff3c00, 0 0 60px #ff7a00; }
+      50% { box-shadow: 0 0 30px #ffa733, 0 0 90px #ff6600; }
     }
 
     #equation {
       position: absolute;
       top: 10vh;
       left: 2vw;
-      font-size: 1rem;
-      color: #00ffcc;
-      z-index: 6;
+      font-size: 1.7rem;
+      z-index: 5;
       opacity: 0;
-      transition: opacity 1.5s ease;
+      color: #fff8e0;
+      text-shadow: 0 0 4px #ffbb66, 0 0 6px #ff6600;
+      animation: flicker 2.5s infinite;
+      transition: opacity 3s ease;
     }
 
-    #animation-dimmer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: transparent;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
+    @keyframes flicker {
+      0%, 100% { opacity: 1; text-shadow: 0 0 4px #ff9933; }
+      50% { opacity: 0.85; text-shadow: 0 0 8px #ffcc66; }
     }
 
     #about-overlay {
@@ -92,140 +93,66 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      padding: 20px;
+      background: rgba(20, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      background-color: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(5px);
+      z-index: 10;
+      padding: 20px;
+      box-sizing: border-box;
       opacity: 0;
       pointer-events: none;
       transition: opacity 2s ease;
-      z-index: 10;
-      box-sizing: border-box;
     }
 
     #about-overlay img {
       width: 140px;
       border-radius: 50%;
+      border: 4px solid #ffaa44;
+      box-shadow: 0 0 20px #ff8800;
       margin-bottom: 1rem;
-      border: 1px solid #00ffcc;
-      opacity: 0.95;
     }
 
     #about-overlay p {
-      max-width: 480px;
+      color: #fff3e0;
       font-size: 1.1rem;
+      max-width: 520px;
       text-align: center;
-      color: #b0ffcc;
-      margin: 0;
       white-space: pre-wrap;
+      text-shadow: 0 0 6px #ffaa55;
     }
 
     #typewriter::after {
       content: '|';
-      animation: blink 1s infinite;
-      color: #00ffcc;
+      animation: blink 1.2s infinite;
+      color: #ffcc99;
     }
 
     @keyframes blink {
-      0% { opacity: 1; }
+      0%, 100% { opacity: 1; }
       50% { opacity: 0; }
-      100% { opacity: 1; }
     }
 
     #continue-btn {
       margin-top: 2rem;
-      padding: 0.6rem 1.3rem;
+      padding: 0.7rem 1.5rem;
       font-size: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      background-color: #00ffcc;
-      color: #000;
+      background-color: #ff5500;
+      color: black;
       border: none;
       border-radius: 5px;
+      font-weight: bold;
+      font-family: 'JetBrains Mono', monospace;
       cursor: pointer;
       opacity: 0;
       display: none;
-      transition: opacity 1s ease;
+      transition: opacity 1s ease, background 0.3s ease;
     }
 
     #continue-btn:hover {
-      background-color: #00bfa5;
-    }
-
-    @media (max-width: 600px) {
-      #about-overlay img {
-        width: 100px;
-        margin-bottom: 0.75rem;
-      }
-
-      #about-overlay p {
-        font-size: 0.95rem;
-        padding: 0 16px;
-        line-height: 1.4;
-      }
-
-      #continue-btn {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        margin-top: 1.5rem;
-      }
-    }
-
-    #metrics-panel {
-      position: fixed;
-      bottom: 10px;
-      left: 12px;
-      background: black;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      color: #00ffcc;
-      display: none;
-      gap: 14px;
-      z-index: 5;
-      line-height: 1.2;
-      pointer-events: none;
-      box-shadow: 0 0 8px #00ffcc33;
-    }
-
-    .metric {
-      display: flex;
-      gap: 4px;
-    }
-
-    .value.positive {
-      color: #00ff88;
-      animation: pulseGreen 1s infinite alternate;
-    }
-
-    .value.negative {
-      color: #ff4d4d;
-      animation: pulseRed 1s infinite alternate;
-    }
-
-    @keyframes pulseGreen {
-      0% { opacity: 1; }
-      100% { opacity: 0.7; }
-    }
-
-    @keyframes pulseRed {
-      0% { opacity: 1; }
-      100% { opacity: 0.7; }
-    }
-
-    #spark {
-      position: fixed;
-      bottom: 38px;
-      left: 12px;
-      height: 25px;
-      width: 300px;
-      background: black;
-      z-index: 4;
-      pointer-events: none;
-      display: none;
+      background-color: #ffaa33;
     }
   </style>
 </head>
@@ -241,16 +168,6 @@
 
   <div id="equation"></div>
   <main id="animation"></main>
-  <canvas id="spark"></canvas>
-
-  <div id="metrics-panel">
-    <div class="metric"><span class="label">R:</span><span id="metric-radius">--</span></div>
-    <div class="metric"><span class="label">V:</span><span id="metric-velocity">--</span></div>
-    <div class="metric"><span class="label">ΔV:</span><span id="metric-delta">--</span></div>
-    <div class="metric"><span class="label">t:</span><span id="metric-t">--</span></div>
-  </div>
-
-  <div id="animation-dimmer"></div>
 
   <div id="about-overlay">
     <img src="1000017195 (2).png" alt="My Face" />
@@ -285,24 +202,13 @@ This website is a personal project to showcase my work and research.`;
     function fadeInContinueButton() {
       const btn = document.getElementById("continue-btn");
       btn.style.display = "inline-block";
-      setTimeout(() => { btn.style.opacity = "1"; }, 50);
+      setTimeout(() => { btn.style.opacity = "1"; }, 100);
     }
 
     document.getElementById("continue-btn").addEventListener("click", () => {
-      const overlay = document.getElementById("about-overlay");
-      overlay.style.opacity = "0";
-      overlay.style.pointerEvents = "none";
+      document.getElementById("about-overlay").style.opacity = "0";
+      document.getElementById("about-overlay").style.pointerEvents = "none";
       document.getElementById("equation").style.opacity = "1";
-
-      const metricsPanel = document.getElementById("metrics-panel");
-      const spark = document.getElementById("spark");
-      metricsPanel.style.display = "flex";
-      spark.style.display = "block";
-
-      setTimeout(() => {
-        metricsPanel.style.opacity = "1";
-        spark.style.opacity = "1";
-      }, 100);
     });
 
     function showAboutOverlay() {

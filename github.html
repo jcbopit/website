@@ -12,10 +12,10 @@
 
     body {
       margin: 0;
-      padding-top: 60px;
+      padding-top: 80px;
       font-family: 'JetBrains Mono', monospace;
-      background: #000;
-      color: #e0ffe0;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+      color: #ffeedd;
       line-height: 1.5;
     }
 
@@ -24,43 +24,54 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #050505;
+      background: rgba(10, 5, 0, 0.9);
       display: flex;
       justify-content: center;
-      padding: 12px 0;
+      padding: 16px 0;
       z-index: 1000;
-      border-bottom: 1px solid #00ff5a33;
+      border-bottom: 2px solid rgba(255, 100, 50, 0.4);
+      box-shadow: 0 0 14px rgba(255, 80, 30, 0.4);
+      backdrop-filter: blur(6px);
+      animation: glowPulse 4s infinite ease-in-out;
     }
 
     #navbar a {
-      color: #66ffb2;
+      color: #ffaa66;
       text-decoration: none;
-      margin: 0 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+      margin: 0 22px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-shadow: 0 0 5px #ff5500;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
     #navbar a:hover {
-      color: #00ffff;
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffaa66, 0 0 22px #ff6600;
     }
 
-    @media (max-width: 600px) {
-      #navbar {
-        justify-content: space-around;
-        padding: 10px;
-      }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 14px rgba(255, 80, 30, 0.4); }
+      50% { box-shadow: 0 0 28px rgba(255, 160, 80, 0.75); }
+    }
 
-      #navbar a {
-        margin: 0 10px;
-        font-size: clamp(0.75rem, 4vw, 0.9rem);
-      }
+    h1, h2 {
+      color: #ffbb66;
+      text-shadow: 0 0 6px rgba(255, 140, 40, 0.8);
+      animation: flicker 2.5s infinite;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.95; text-shadow: 0 0 5px #ff9933; }
+      25% { opacity: 1; text-shadow: 0 0 8px #ffcc66; }
+      50% { opacity: 0.92; text-shadow: 0 0 6px #ff7733; }
+      75% { opacity: 0.98; text-shadow: 0 0 8px #ffaa55; }
+      100% { opacity: 1; text-shadow: 0 0 9px #ffbb66; }
     }
 
     main {
       padding: 2rem;
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
     }
 
@@ -69,58 +80,55 @@
       flex-wrap: wrap;
       gap: 1.5rem;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
 
     .profile-section img {
       width: 130px;
       border-radius: 50%;
-      border: 2px solid #00ffcc;
+      border: 3px solid #ffaa44;
+      box-shadow: 0 0 15px #ff6600;
     }
 
     .profile-text h2 {
       margin: 0;
       font-size: 1.5rem;
-      color: #00ffcc;
+      color: #ffcc99;
     }
 
     .profile-text p {
       margin: 0.4rem 0;
-      color: #b0ffcc;
-    }
-
-    h1, h2 {
-      color: #66ffb2;
+      color: #ffd7aa;
     }
 
     .repo-card {
-      border: 1px solid #00ff5a22;
-      border-radius: 8px;
-      padding: 1.2rem;
-      background: #0f0f0f;
+      border: 1px solid #ff8c0022;
+      border-radius: 10px;
+      padding: 1.3rem;
+      background: rgba(20, 10, 0, 0.75);
+      box-shadow: 0 2px 10px rgba(255, 90, 20, 0.15);
+      margin-bottom: 1.7rem;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 1px 4px rgba(0,255,120,0.05);
-      margin-bottom: 1.5rem;
     }
 
     .repo-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0, 255, 120, 0.08);
+      transform: translateY(-6px);
+      box-shadow: 0 6px 20px rgba(255, 120, 40, 0.3);
     }
 
     .repo-card h3 {
-      margin: 0 0 0.4rem 0;
+      margin: 0 0 0.5rem;
       font-size: 1.2rem;
     }
 
     .repo-card a {
       text-decoration: none;
-      color: #00ffcc;
+      color: #ffb366;
     }
 
     .repo-card p {
-      margin: 0 0 0.8rem 0;
-      color: #99ffaa;
+      margin: 0 0 0.8rem;
+      color: #ffcfa3;
     }
 
     .repo-meta {
@@ -129,7 +137,7 @@
       flex-wrap: wrap;
       gap: 1rem;
       font-size: 0.9rem;
-      color: #80ffc0;
+      color: #ffd699;
     }
 
     .dot {
@@ -147,9 +155,10 @@
 
     #contributions img {
       max-width: 100%;
-      border-radius: 6px;
-      border: 1px solid #00ffcc22;
-      filter: invert(0.95) hue-rotate(90deg) brightness(1.1);
+      border-radius: 8px;
+      border: 1px solid #ffb96644;
+      filter: invert(0.9) hue-rotate(30deg) brightness(1.1);
+      box-shadow: 0 0 10px rgba(255, 120, 30, 0.2);
     }
   </style>
 </head>
@@ -173,7 +182,7 @@
           <strong id="repo-count">0</strong> repositories — 
           <strong id="followers">0</strong> followers
         </p>
-        <a href="https://github.com/jcbopit" target="_blank" style="color: #00ffff;">Visit GitHub →</a>
+        <a href="https://github.com/jcbopit" target="_blank" style="color: #ffaa66;">Visit GitHub →</a>
       </div>
     </section>
 

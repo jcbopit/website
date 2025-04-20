@@ -1,16 +1,19 @@
 let t = 0;
 let trace = [];
-let velocityHistory = [];
-let lastVelocity = 0;
-let cameraScale = 20;
+let cameraScale = 17.5;
 let targetScale = 1.5;
 let transitionSpeed = 0.017;
 
 let hasSnapped = false;
 let aboutShown = false;
 let continueClicked = false;
+let usingIntroAnimation = true;
 
-let sparkCanvas, sparkCtx;
+let boids = [];
+const numBoids = 25;
+let flameParticles = [];
+let backgroundStars = [];
+let nebulaParticles = [];
 
 let cameraTransitioningToStatic = false;
 let staticTransitionStartTime = 0;
@@ -34,42 +37,55 @@ function setup() {
     document.getElementById("about-overlay").style.opacity = "0";
     document.getElementById("about-overlay").style.pointerEvents = "none";
     document.getElementById("equation").style.opacity = "1";
-    document.body.classList.add("show-metrics"); // 👈 THIS activates your CSS!
     continueClicked = true;
+    usingIntroAnimation = false;
+    resetCamera();
   });
 
-  sparkCanvas = document.getElementById("spark");
-  sparkCanvas.width = window.innerWidth;
-  sparkCanvas.height = 40;
-  sparkCtx = sparkCanvas.getContext("2d");
+  for (let i = 0; i < numBoids; i++) {
+    boids.push(new Boid(random(width), random(height)));
+  }
+
+  for (let i = 0; i < 300; i++) {
+    backgroundStars.push({
+      x: random(-width, 2 * width),
+      y: random(-height, 2 * height),
+      size: random(0.5, 2.5),
+      depth: random(0.1, 1)
+    });
+  }
+
+  for (let i = 0; i < 40; i++) {
+    nebulaParticles.push(new NebulaParticle());
+  }
 }
 
 function draw() {
-  background(160, 10, 5);
-  drawGrid();
+  background(0, 0, 0);
+  drawParallaxStars();
+  drawNebula();
 
-  const numLayers = 5;
+  const numLayers = 4;
   const baseAmp = 110;
   const freqBase = 2;
   const phase = HALF_PI;
 
-  let x = 0, y = 0, vx = 0, vy = 0;
+  let x = 0, y = 0;
+  let positions = [];
+
   for (let i = 0; i < numLayers; i++) {
     const freq = pow(Math.E, i) * freqBase;
-    const amp = baseAmp * pow(0.5, i);
+    const amp = baseAmp * (usingIntroAnimation ? pow(2, i) : pow(0.5, i));
     const angle = freq * t * TWO_PI + phase;
+    let prevX = x;
+    let prevY = y;
     x += amp * cos(angle);
     y += amp * sin(angle);
-    vx += -amp * sin(angle) * freq * TWO_PI;
-    vy += amp * cos(angle) * freq * TWO_PI;
+    positions.push({ prevX, prevY, x, y, amp });
   }
 
-  const velocity = sqrt(vx * vx + vy * vy);
-  const delta = velocity - lastVelocity;
-  lastVelocity = velocity;
-
   trace.unshift(createVector(x, y));
-  if (trace.length > 250) trace.pop();
+  if (trace.length > 60) trace.pop();
 
   push();
   translate(width / 2, height / 2);
@@ -109,113 +125,212 @@ function draw() {
     }
   } else {
     scale(staticCameraScale);
-    translate(continueClicked ? -x : 0, continueClicked ? -y : 0);
   }
 
-  x = 0;
-  y = 0;
-  let prevX, prevY;
-
-  for (let i = 0; i < numLayers; i++) {
-    const freq = pow(Math.E, i) * freqBase;
-    const amp = baseAmp * pow(0.5, i);
-    const angle = freq * t * TWO_PI + phase;
-
-    prevX = x;
-    prevY = y;
-    x += amp * cos(angle);
-    y += amp * sin(angle);
-
-    const hue = map(i, 0, numLayers - 1, 100, 160);
-
-    stroke(hue, 80, 100);
-    strokeWeight(2.5);
+  for (let p of positions) {
+    drawingContext.shadowBlur = 20;
+    drawingContext.shadowColor = 'white';
+    stroke(0, 0, 100);
+    strokeWeight(4);
     noFill();
-    ellipse(prevX, prevY, amp * 2);
+    ellipse(p.prevX, p.prevY, p.amp * 2);
 
-    strokeWeight(1.5);
-    stroke(hue, 90, 100);
-    line(prevX, prevY, x, y);
+    strokeWeight(3);
+    line(p.prevX, p.prevY, p.x, p.y);
+    drawingContext.shadowBlur = 0;
 
-    drawArrow(prevX, prevY, x, y, amp * 0.1, hue);
+    drawArrow(p.prevX, p.prevY, p.x, p.y, p.amp * 0.1);
   }
 
+  if (!usingIntroAnimation) {
+    for (let i = 0; i < 4; i++) flameParticles.push(new FlameParticle(x, y));
+  }
+
+  for (let i = flameParticles.length - 1; i >= 0; i--) {
+    flameParticles[i].update();
+    flameParticles[i].display();
+    if (flameParticles[i].lifespan <= 0) flameParticles.splice(i, 1);
+  }
+
+  stroke(0, 0, 100, 8);
+  strokeWeight(1.5);
   noFill();
   beginShape();
-  for (let i = 0; i < trace.length; i++) {
-    const v = trace[i];
-    const alpha = map(i, 0, trace.length, 0, 100);
-    stroke(160, 90, 100, alpha);
-    vertex(v.x, v.y);
-  }
+  for (let v of trace) vertex(v.x, v.y);
   endShape();
+
+  for (let boid of boids) {
+    if (!usingIntroAnimation) {
+      boid.seek(createVector(x, y));
+      boid.wiggle();
+      boid.flock(boids);
+    }
+    boid.update();
+    boid.show();
+  }
+
   pop();
+  t += 0.00035 * (usingIntroAnimation ? 0.15 : 1);
 
-  t += 0.00035;
-
-  updateMetrics(velocity, delta);
   renderEquation();
 }
 
-function drawArrow(x1, y1, x2, y2, size, hue) {
+function drawParallaxStars() {
+  push();
+  translate(width / 2, height / 2);
+  for (let star of backgroundStars) {
+    const offsetX = (currentCameraX || 0) * star.depth;
+    const offsetY = (currentCameraY || 0) * star.depth;
+    drawingContext.shadowBlur = 8;
+    drawingContext.shadowColor = color(0, 0, 100, 90);
+    fill(random(0, 40), 50, 100, random(60, 100));
+    noStroke();
+    ellipse(star.x - offsetX, star.y - offsetY, star.size);
+    drawingContext.shadowBlur = 0;
+  }
+  pop();
+}
+
+function drawNebula() {
+  push();
+  translate(width / 2, height / 2);
+  for (let p of nebulaParticles) {
+    p.update();
+    p.display();
+  }
+  pop();
+}
+
+class NebulaParticle {
+  constructor() {
+    this.x = random(-width, width);
+    this.y = random(-height, height);
+    this.r = random(30, 150);
+    this.hue = random(10, 60);
+    this.alpha = random(5, 15);
+    this.dx = random(-0.5, 0.5);
+    this.dy = random(-0.5, 0.5);
+  }
+  update() {
+    this.x += this.dx;
+    this.y += this.dy;
+  }
+  display() {
+    drawingContext.shadowBlur = 60;
+    drawingContext.shadowColor = color(this.hue, 80, 80, this.alpha);
+    noStroke();
+    fill(this.hue, 80, 80, this.alpha);
+    ellipse(this.x, this.y, this.r);
+    drawingContext.shadowBlur = 0;
+  }
+}
+
+class FlameParticle {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.vel = p5.Vector.random2D().mult(random(0.5, 1.4));
+    this.lifespan = 80;
+    this.size = random(4, 6);
+    this.hue = random(15, 45);
+  }
+  update() {
+    this.pos.add(this.vel);
+    this.vel.y -= 0.02;
+    this.lifespan -= 2.5;
+  }
+  display() {
+    drawingContext.shadowBlur = 35;
+    drawingContext.shadowColor = color(this.hue, 100, 100);
+    noStroke();
+    fill(this.hue, 100, 100, this.lifespan);
+    ellipse(this.pos.x, this.pos.y, this.size);
+    drawingContext.shadowBlur = 0;
+  }
+}
+
+// Other classes (Boid, drawArrow, etc.) remain unchanged...
+
+function resetCamera() {
+  hasSnapped = false;
+  cameraTransitioningToStatic = false;
+  cameraScale = 20;
+}
+
+function renderEquation() {
+  const eq = String.raw`
+    \vec{r}(t) = \sum_{i=0}^{n-1} A_i \cdot
+    \begin{bmatrix}
+    \cos(2\pi f_i t + \phi) \\
+    \sin(2\pi f_i t + \phi)
+    \end{bmatrix}
+  `;
+  const eqElement = document.getElementById("equation");
+  if (window.katex && eqElement) {
+    katex.render(eq, eqElement, {
+      throwOnError: false,
+      displayMode: true
+    });
+  }
+}
+
+
+class Boid {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = p5.Vector.random2D();
+    this.acceleration = createVector();
+    this.maxSpeed = 3;
+    this.maxForce = 0.05;
+    this.overshootFactor = random(1.1, 1.3);
+  }
+
+  seek(target) {
+    let desired = p5.Vector.sub(target, this.position);
+    desired.setMag(this.maxSpeed * this.overshootFactor);
+    let steer = p5.Vector.sub(desired, this.velocity);
+    steer.limit(this.maxForce);
+    this.acceleration.add(steer);
+  }
+
+  wiggle() {
+    let wiggle = p5.Vector.random2D().mult(0.2);
+    this.acceleration.add(wiggle);
+  }
+
+  flock(boids) {}
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.maxSpeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+  }
+
+  show() {
+    drawingContext.shadowBlur = 25;
+    drawingContext.shadowColor = color(60, 100, 100);
+    fill(60, 100, 100);
+    noStroke();
+    ellipse(this.position.x, this.position.y, 4);
+    drawingContext.shadowBlur = 0;
+  }
+}
+
+function drawArrow(x1, y1, x2, y2, size) {
   const angle = atan2(y2 - y1, x2 - x1);
   push();
   translate(x2, y2);
   rotate(angle);
-  fill(hue, 80, 100);
+  drawingContext.shadowBlur = 15;
+  drawingContext.shadowColor = 'white';
+  fill(0, 0, 100);
   noStroke();
   triangle(0, 0, -size, size / 2, -size, -size / 2);
+  drawingContext.shadowBlur = 0;
   pop();
 }
 
-function drawGrid() {
-  const spacing = 22;
-  stroke(140, 20, 30);
-  strokeWeight(0.3);
-  for (let x = 0; x < width; x += spacing) {
-    line(x, 0, x, height);
-  }
-  for (let y = 0; y < height; y += spacing) {
-    line(0, y, width, y);
-  }
-}
-
-function updateMetrics(v, delta) {
-  const r = trace[0] ? trace[0].mag().toFixed(2) : "0.00";
-  const deltaElem = document.getElementById("metric-delta");
-  const velElem = document.getElementById("metric-velocity");
-  const rElem = document.getElementById("metric-radius");
-
-  rElem.textContent = r;
-  velElem.textContent = v.toFixed(2);
-  deltaElem.textContent = delta.toFixed(2);
-  deltaElem.className = delta > 0 ? "value positive" : "value negative";
-
-  document.getElementById("metric-t").textContent = t.toFixed(2);
-
-  velocityHistory.push(v);
-  if (velocityHistory.length > 200) velocityHistory.shift();
-  drawVelocitySparkline();
-}
-
-function drawVelocitySparkline() {
-  sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
-  sparkCtx.beginPath();
-  sparkCtx.strokeStyle = "#00ffcc";
-  sparkCtx.lineWidth = 1.3;
-
-  const maxV = Math.max(...velocityHistory);
-  const minV = Math.min(...velocityHistory);
-
-  velocityHistory.forEach((val, i) => {
-    const x = (i / velocityHistory.length) * sparkCanvas.width;
-    const y = sparkCanvas.height - ((val - minV) / (maxV - minV + 1e-3)) * sparkCanvas.height;
-    if (i === 0) sparkCtx.moveTo(x, y);
-    else sparkCtx.lineTo(x, y);
-  });
-
-  sparkCtx.stroke();
-}
+function drawGrid() {}
 
 function renderEquation() {
   const eq = String.raw`
@@ -243,7 +358,4 @@ function showAboutOverlay() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  if (sparkCanvas) {
-    sparkCanvas.width = window.innerWidth;
-  }
 }
