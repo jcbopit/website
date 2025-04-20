@@ -28,8 +28,7 @@ let currentCameraScale = 20;
 let isMobile = false;
 
 function setup() {
-  isMobile = windowWidth < 600;
-  if (isMobile) pixelDensity(1); // Performance boost
+  isMobile = windowWidth < 600; 
   const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("animation");
   canvas.style("z-index", "0");
@@ -59,7 +58,7 @@ function setup() {
     });
   }
 
-  for (let i = 0; i < (isMobile ? 25 : 40); i++) {
+  for (let i = 0; i < (isMobile ? 10 : 20); i++) {
     nebulaParticles.push(new NebulaParticle());
   }
 }
@@ -231,7 +230,7 @@ class FlameParticle {
   constructor(x, y) {
     this.pos = createVector(x, y);
     this.vel = p5.Vector.random2D().mult(random(0.4, 1.1));
-    this.lifespan = isMobile ? 60 : 80;
+    this.lifespan = isMobile ? 30 : 50;
     this.size = random(3, 5);
     this.hue = random(15, 45);
   }
