@@ -17,6 +17,7 @@
       background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
       color: #ffeedd;
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
     #navbar {
@@ -27,22 +28,25 @@
       background: rgba(10, 5, 0, 0.9);
       display: flex;
       justify-content: center;
+      align-items: center;
+      gap: clamp(1rem, 4vw, 2.5rem);
       padding: 16px 0;
       z-index: 1000;
       border-bottom: 2px solid rgba(255, 100, 50, 0.4);
       box-shadow: 0 0 14px rgba(255, 80, 30, 0.4);
       backdrop-filter: blur(6px);
       animation: glowPulse 4s infinite ease-in-out;
+      flex-wrap: wrap;
     }
 
     #navbar a {
       color: #ffaa66;
       text-decoration: none;
-      margin: 0 22px;
-      font-size: 1.1rem;
+      font-size: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
       font-weight: 800;
       text-shadow: 0 0 5px #ff5500;
       transition: color 0.3s ease, text-shadow 0.3s ease;
+      white-space: nowrap;
     }
 
     #navbar a:hover {
@@ -90,9 +94,13 @@
       box-shadow: 0 0 15px #ff6600;
     }
 
+    .profile-text {
+      flex: 1 1 250px;
+    }
+
     .profile-text h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: clamp(1.2rem, 2vw + 0.3rem, 1.6rem);
       color: #ffcc99;
     }
 
@@ -159,6 +167,26 @@
       border: 1px solid #ffb96644;
       filter: invert(0.9) hue-rotate(30deg) brightness(1.1);
       box-shadow: 0 0 10px rgba(255, 120, 30, 0.2);
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+
+      .profile-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .profile-text h2 {
+        font-size: 1.3rem;
+      }
+
+      .repo-card {
+        padding: 1rem;
+      }
     }
   </style>
 </head>

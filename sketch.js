@@ -10,7 +10,7 @@ let continueClicked = false;
 let usingIntroAnimation = true;
 
 let boids = [];
-const numBoids = 25;
+const numBoids = 15;
 let flameParticles = [];
 let backgroundStars = [];
 let nebulaParticles = [];
@@ -25,12 +25,16 @@ let currentCameraX = 0;
 let currentCameraY = 0;
 let currentCameraScale = 20;
 
+let isMobile = false;
+
 function setup() {
+  isMobile = windowWidth < 600;
+  if (isMobile) pixelDensity(1); // Performance boost
   const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("animation");
   canvas.style("z-index", "0");
   colorMode(HSB, 360, 100, 100, 100);
-  strokeWeight(2.5);
+  strokeWeight(isMobile ? 1.5 : 2.5);
   noFill();
 
   document.getElementById("continue-btn").addEventListener("click", () => {
@@ -46,16 +50,16 @@ function setup() {
     boids.push(new Boid(random(width), random(height)));
   }
 
-  for (let i = 0; i < 300; i++) {
+  for (let i = 0; i < 200; i++) {
     backgroundStars.push({
       x: random(-width, 2 * width),
       y: random(-height, 2 * height),
-      size: random(0.5, 2.5),
+      size: random(0.5, isMobile ? 1.8 : 2.5),
       depth: random(0.1, 1)
     });
   }
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < (isMobile ? 25 : 40); i++) {
     nebulaParticles.push(new NebulaParticle());
   }
 }
@@ -66,7 +70,7 @@ function draw() {
   drawNebula();
 
   const numLayers = 4;
-  const baseAmp = 110;
+  const baseAmp = isMobile ? 55 : 110;
   const freqBase = 2;
   const phase = HALF_PI;
 
@@ -131,19 +135,18 @@ function draw() {
     drawingContext.shadowBlur = 20;
     drawingContext.shadowColor = 'white';
     stroke(0, 0, 100);
-    strokeWeight(4);
-    noFill();
+    strokeWeight(isMobile ? 2.5 : 4);
     ellipse(p.prevX, p.prevY, p.amp * 2);
 
-    strokeWeight(3);
+    strokeWeight(2.5);
     line(p.prevX, p.prevY, p.x, p.y);
     drawingContext.shadowBlur = 0;
-
     drawArrow(p.prevX, p.prevY, p.x, p.y, p.amp * 0.1);
   }
 
   if (!usingIntroAnimation) {
-    for (let i = 0; i < 4; i++) flameParticles.push(new FlameParticle(x, y));
+    const numParticles = isMobile ? 2 : 4;
+    for (let i = 0; i < numParticles; i++) flameParticles.push(new FlameParticle(x, y));
   }
 
   for (let i = flameParticles.length - 1; i >= 0; i--) {
@@ -171,7 +174,6 @@ function draw() {
 
   pop();
   t += 0.00035 * (usingIntroAnimation ? 0.15 : 1);
-
   renderEquation();
 }
 
@@ -207,9 +209,9 @@ class NebulaParticle {
     this.y = random(-height, height);
     this.r = random(30, 150);
     this.hue = random(10, 60);
-    this.alpha = random(5, 15);
-    this.dx = random(-0.5, 0.5);
-    this.dy = random(-0.5, 0.5);
+    this.alpha = random(4, 10);
+    this.dx = random(-0.3, 0.3);
+    this.dy = random(-0.3, 0.3);
   }
   update() {
     this.x += this.dx;
@@ -228,18 +230,18 @@ class NebulaParticle {
 class FlameParticle {
   constructor(x, y) {
     this.pos = createVector(x, y);
-    this.vel = p5.Vector.random2D().mult(random(0.5, 1.4));
-    this.lifespan = 80;
-    this.size = random(4, 6);
+    this.vel = p5.Vector.random2D().mult(random(0.4, 1.1));
+    this.lifespan = isMobile ? 60 : 80;
+    this.size = random(3, 5);
     this.hue = random(15, 45);
   }
   update() {
     this.pos.add(this.vel);
-    this.vel.y -= 0.02;
-    this.lifespan -= 2.5;
+    this.vel.y -= 0.015;
+    this.lifespan -= 2;
   }
   display() {
-    drawingContext.shadowBlur = 35;
+    drawingContext.shadowBlur = 30;
     drawingContext.shadowColor = color(this.hue, 100, 100);
     noStroke();
     fill(this.hue, 100, 100, this.lifespan);
@@ -247,32 +249,6 @@ class FlameParticle {
     drawingContext.shadowBlur = 0;
   }
 }
-
-// Other classes (Boid, drawArrow, etc.) remain unchanged...
-
-function resetCamera() {
-  hasSnapped = false;
-  cameraTransitioningToStatic = false;
-  cameraScale = 20;
-}
-
-function renderEquation() {
-  const eq = String.raw`
-    \vec{r}(t) = \sum_{i=0}^{n-1} A_i \cdot
-    \begin{bmatrix}
-    \cos(2\pi f_i t + \phi) \\
-    \sin(2\pi f_i t + \phi)
-    \end{bmatrix}
-  `;
-  const eqElement = document.getElementById("equation");
-  if (window.katex && eqElement) {
-    katex.render(eq, eqElement, {
-      throwOnError: false,
-      displayMode: true
-    });
-  }
-}
-
 
 class Boid {
   constructor(x, y) {
@@ -297,7 +273,7 @@ class Boid {
     this.acceleration.add(wiggle);
   }
 
-  flock(boids) {}
+  flock(_) {}
 
   update() {
     this.velocity.add(this.acceleration);
@@ -330,8 +306,6 @@ function drawArrow(x1, y1, x2, y2, size) {
   pop();
 }
 
-function drawGrid() {}
-
 function renderEquation() {
   const eq = String.raw`
     \vec{r}(t) = \sum_{i=0}^{n-1} A_i \cdot
@@ -347,6 +321,12 @@ function renderEquation() {
       displayMode: true
     });
   }
+}
+
+function resetCamera() {
+  hasSnapped = false;
+  cameraTransitioningToStatic = false;
+  cameraScale = 20;
 }
 
 function showAboutOverlay() {
