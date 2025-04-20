@@ -1,4 +1,3 @@
-
 :root {
   --bg: #0d1117;
   --text: #e6edf3;
@@ -131,4 +130,20 @@ main {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+/* Hide metrics and spark by default */
+#metrics-panel,
+#spark {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+body.show-metrics #metrics-panel,
+body.show-metrics #spark {
+  display: flex; /* or block for #spark */
+  opacity: 1;
+  pointer-events: auto;
 }

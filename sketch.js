@@ -12,11 +12,9 @@ let continueClicked = false;
 
 let sparkCanvas, sparkCtx;
 
-// Smooth transition variables
 let cameraTransitioningToStatic = false;
 let staticTransitionStartTime = 0;
-let cameraTransitionDuration = 3000;
-let cameraIsNowStatic = false;
+let cameraTransitionDuration = 4200;
 let staticCameraScale = 1.5;
 let staticCameraX = 0;
 let staticCameraY = 0;
@@ -36,6 +34,7 @@ function setup() {
     document.getElementById("about-overlay").style.opacity = "0";
     document.getElementById("about-overlay").style.pointerEvents = "none";
     document.getElementById("equation").style.opacity = "1";
+    document.body.classList.add("show-metrics"); // 👈 THIS activates your CSS!
     continueClicked = true;
   });
 
@@ -89,7 +88,7 @@ function draw() {
   } else if (cameraTransitioningToStatic) {
     const elapsed = millis() - staticTransitionStartTime;
     const progress = constrain(elapsed / cameraTransitionDuration, 0, 1);
-    const ease = 1 - pow(1 - progress, 3); // Cubic ease-out
+    const ease = 1 - pow(1 - progress, 3);
 
     const camX = lerp(currentCameraX, staticCameraX, ease);
     const camY = lerp(currentCameraY, staticCameraY, ease);
@@ -222,7 +221,7 @@ function renderEquation() {
   const eq = String.raw`
     \vec{r}(t) = \sum_{i=0}^{n-1} A_i \cdot
     \begin{bmatrix}
-    \cos(2\pi f_i t + \phi) \\\\
+    \cos(2\pi f_i t + \phi) \\
     \sin(2\pi f_i t + \phi)
     \end{bmatrix}
   `;

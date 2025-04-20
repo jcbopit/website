@@ -14,7 +14,7 @@
       margin: 0;
       padding-top: 60px;
       font-family: 'JetBrains Mono', monospace;
-      background: #000000;
+      background: #000;
       color: #e0ffe0;
       line-height: 1.5;
     }
@@ -24,12 +24,12 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: #0a0a0a;
+      background: #050505;
       display: flex;
       justify-content: center;
       padding: 12px 0;
       z-index: 1000;
-      border-bottom: 1px solid #00ff5a22;
+      border-bottom: 1px solid #00ff5a33;
     }
 
     #navbar a {
@@ -38,11 +38,24 @@
       margin: 0 20px;
       font-size: 1rem;
       font-weight: 600;
+      white-space: nowrap;
       transition: color 0.2s ease;
     }
 
     #navbar a:hover {
       color: #00ffff;
+    }
+
+    @media (max-width: 600px) {
+      #navbar {
+        justify-content: space-around;
+        padding: 10px;
+      }
+
+      #navbar a {
+        margin: 0 10px;
+        font-size: clamp(0.75rem, 4vw, 0.9rem);
+      }
     }
 
     main {
@@ -157,7 +170,7 @@
         <h2 id="github-name">GitHub Profile</h2>
         <p id="github-bio">Loading bio...</p>
         <p>
-          <strong id="repo-count">0</strong> repositories —
+          <strong id="repo-count">0</strong> repositories — 
           <strong id="followers">0</strong> followers
         </p>
         <a href="https://github.com/jcbopit" target="_blank" style="color: #00ffff;">Visit GitHub →</a>
