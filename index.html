@@ -33,6 +33,7 @@
       padding: 12px 0;
       z-index: 1000;
       border-bottom: 1px solid #00ff5a33;
+      box-sizing: border-box;
     }
 
     #navbar a {
@@ -41,12 +42,31 @@
       margin: 0 20px;
       font-size: 1rem;
       font-weight: 600;
+      white-space: nowrap;
       transition: color 0.2s ease;
     }
 
     #navbar a:hover {
       color: #00ffff;
     }
+
+    @media (max-width: 600px) {
+  #navbar {
+    justify-content: flex-start;
+    padding: 12px 8px 12px 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  #navbar a {
+    margin: 0 14px;
+    flex-shrink: 0;
+  }
+}
+
 
     #equation {
       position: absolute;
@@ -77,6 +97,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -87,6 +108,7 @@
       pointer-events: none;
       transition: opacity 2s ease;
       z-index: 10;
+      box-sizing: border-box;
     }
 
     #about-overlay img {
@@ -103,6 +125,19 @@
       text-align: center;
       color: #b0ffcc;
       margin: 0;
+      white-space: pre-wrap;
+    }
+
+    #typewriter::after {
+      content: '|';
+      animation: blink 1s infinite;
+      color: #00ffcc;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     #continue-btn {
@@ -115,57 +150,87 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      opacity: 0;
+      display: none;
+      transition: opacity 1s ease;
     }
 
     #continue-btn:hover {
       background-color: #00bfa5;
     }
 
+    @media (max-width: 600px) {
+      #about-overlay img {
+        width: 100px;
+        margin-bottom: 0.75rem;
+      }
+
+      #about-overlay p {
+        font-size: 0.95rem;
+        padding: 0 16px;
+        line-height: 1.4;
+      }
+
+      #continue-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        margin-top: 1.5rem;
+      }
+    }
+
     #metrics-panel {
-  position: fixed;
-  bottom: 10px;
-  left: 12px;
-  background: black;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  color: #00ffcc;
-  display: flex;
-  gap: 14px;
-  z-index: 5;
-  line-height: 1.2;
-  pointer-events: none;
-  box-shadow: 0 0 8px #00ffcc33;
-}
+      position: fixed;
+      bottom: 10px;
+      left: 12px;
+      background: black;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #00ffcc;
+      display: flex;
+      gap: 14px;
+      z-index: 5;
+      line-height: 1.2;
+      pointer-events: none;
+      box-shadow: 0 0 8px #00ffcc33;
+    }
 
-.metric {
-  display: flex;
-  gap: 4px;
-}
+    .metric {
+      display: flex;
+      gap: 4px;
+    }
 
-.value.positive {
-  color: #00ff88;
-  animation: pulseGreen 1s infinite alternate;
-}
+    .value.positive {
+      color: #00ff88;
+      animation: pulseGreen 1s infinite alternate;
+    }
 
-.value.negative {
-  color: #ff4d4d;
-  animation: pulseRed 1s infinite alternate;
-}
+    .value.negative {
+      color: #ff4d4d;
+      animation: pulseRed 1s infinite alternate;
+    }
 
-#spark {
-  position: fixed;
-  bottom: 38px;
-  left: 12px;
-  height: 25px;
-  width: 300px;
-  background: black;
-  z-index: 4;
-  pointer-events: none;
-}
+    @keyframes pulseGreen {
+      0% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
 
+    @keyframes pulseRed {
+      0% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+
+    #spark {
+      position: fixed;
+      bottom: 38px;
+      left: 12px;
+      height: 25px;
+      width: 300px;
+      background: black;
+      z-index: 4;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -193,15 +258,67 @@
 
   <div id="about-overlay">
     <img src="1000017195 (2).png" alt="My Face" />
-    <p>
-      Hi, I’m Justin 👋<br />
-      I’m a Sophomore at Indiana University pursuing a B.S. in Theoretical Physics, Pure Mathematics, and a Minor in Computer Science.
-      I grew up across Asia—living in Shanghai, Hong Kong, and Indonesia—and studied at international schools, which shaped my interdisciplinary perspective.
-      My goal is to pursue graduate studies in math and transition into quantitative finance.
-    </p>
+    <p id="typewriter"></p>
     <button id="continue-btn">Continue</button>
   </div>
 
   <script src="sketch.js"></script>
+  <script>
+    const fullText = `Hi, I’m Justin 👋
+I’m a Sophomore at Indiana University pursuing a B.S. in Theoretical Physics, Pure Mathematics, and a Minor in Computer Science.
+I grew up across Asia—living in Shanghai, Hong Kong, and Indonesia—and studied at international schools, which shaped my interdisciplinary perspective.
+My goal is to pursue graduate studies in math and transition into quantitative finance.`;
+
+    let currentChar = 0;
+    const speed = 40;
+    let audio = new Audio("typewriter-key.mp3");
+
+    function typeWriter() {
+      if (currentChar < fullText.length) {
+        const char = fullText.charAt(currentChar);
+        document.getElementById("typewriter").textContent += char;
+        if (char !== "\n") audio.cloneNode().play();
+        currentChar++;
+        setTimeout(typeWriter, speed);
+      } else {
+        fadeInContinueButton();
+      }
+    }
+
+    function fadeInContinueButton() {
+      const btn = document.getElementById("continue-btn");
+      btn.style.display = "inline-block";
+      setTimeout(() => { btn.style.opacity = "1"; }, 50);
+    }
+
+    document.getElementById("continue-btn").addEventListener("click", () => {
+      const overlay = document.getElementById("about-overlay");
+      overlay.style.opacity = "0";
+      overlay.style.pointerEvents = "none";
+      document.getElementById("equation").style.opacity = "1";
+    });
+
+    function showAboutOverlay() {
+  const overlay = document.getElementById("about-overlay");
+  overlay.style.opacity = "1";
+  overlay.style.pointerEvents = "auto";
+  document.getElementById("equation").style.opacity = "0";
+
+  // Set an invisible space to ensure blinking cursor renders
+  const typewriter = document.getElementById("typewriter");
+  typewriter.textContent = "\u200B"; // zero-width space
+  document.getElementById("continue-btn").style.display = "none";
+  currentChar = 0;
+
+  // Start typing after delay
+  setTimeout(() => {
+    typewriter.textContent = ""; // clear the space
+    typeWriter();
+  }, 3000);
+}
+
+
+    window.showAboutOverlay = showAboutOverlay;
+  </script>
 </body>
 </html>
