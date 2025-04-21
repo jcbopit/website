@@ -1,39 +1,48 @@
+/* ──────────────────────────────────────────────── */
+/*                GLOBAL STYLES                    */
+/* ──────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
 :root {
   --bg: #000a14;
   --text: #e6faff;
-  --accent: #66ccff;
-  --card-bg: #0b1826;
-  --border: #33bbff;
-  --glow: #33bbff;
+  --accent: #88ccff;
+  --card-bg: #0a141e;
+  --border: #6ebaff;
+  --glow: #9cdcff;
 }
 
-/* Global Reset + Background */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  width: 100%;
   font-family: 'JetBrains Mono', monospace;
   background: radial-gradient(ellipse at center, #000a14 0%, #000000 100%);
   color: var(--text);
+  overflow-x: hidden;
 }
 
-/* Navbar */
 #navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 20, 40, 0.95);
+  background: rgba(5, 10, 20, 0.3);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   padding: 14px 0;
   z-index: 1000;
-  border-bottom: 2px solid rgba(102, 204, 255, 0.5);
-  box-shadow: 0 0 18px rgba(51, 187, 255, 0.4);
-  backdrop-filter: blur(6px);
-  animation: glowPulse 4s infinite ease-in-out;
+  border-bottom: 1px solid rgba(122, 170, 255, 0.1);
+  box-shadow:
+    0 0 50px rgba(140, 220, 255, 0.12),
+    0 0 150px rgba(140, 220, 255, 0.06),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: glowPulse 5s ease-in-out infinite;
 }
 
 #navbar a {
@@ -42,7 +51,7 @@ html, body {
   margin: 0 18px;
   font-size: calc(0.9rem + 0.5vw);
   font-weight: 800;
-  text-shadow: 0 0 6px var(--glow);
+  text-shadow: 0 0 6px var(--glow), 0 0 12px #8ccaff;
   transition: color 0.3s ease, text-shadow 0.3s ease;
   white-space: nowrap;
 }
@@ -54,109 +63,21 @@ html, body {
 
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(51, 160, 255, 0.3);
+    box-shadow: 0 0 20px rgba(153, 255, 255, 0.1), 0 0 40px rgba(153, 255, 255, 0.05);
   }
   50% {
-    box-shadow: 0 0 32px rgba(102, 220, 255, 0.75);
+    box-shadow: 0 0 60px rgba(153, 255, 255, 0.25), 0 0 120px rgba(153, 255, 255, 0.1);
   }
-}
-
-/* Canvas container */
-main {
-  display: block;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-
-/* Equation */
-#equation {
-  position: absolute;
-  top: 10vh;
-  left: 4vw;
-  font-size: clamp(1rem, 1.5vw + 0.5rem, 1.6rem);
-  color: var(--text);
-  z-index: 6;
-  opacity: 0;
-  transition: opacity 2s ease;
-  text-shadow: 0 0 4px #88dfff, 0 0 6px #55ccff;
-  animation: flicker 2.5s infinite;
 }
 
 @keyframes flicker {
-  0%, 100% { opacity: 0.95; text-shadow: 0 0 4px #88dfff; }
-  25% { opacity: 1; text-shadow: 0 0 6px #aaddff; }
-  50% { opacity: 0.92; text-shadow: 0 0 5px #66ccff; }
-  75% { opacity: 0.98; text-shadow: 0 0 6px #99eeff; }
+  0%, 100% { opacity: 1; text-shadow: 0 0 4px #66ccff; }
+  50% { opacity: 0.85; text-shadow: 0 0 8px #aaddff; }
 }
 
-/* About overlay */
-#about-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: rgba(0, 10, 30, 0.7);
-  backdrop-filter: blur(7px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2s ease;
-  z-index: 5;
-  padding: 1rem;
-  text-align: center;
-}
-
-#about-overlay img {
-  width: clamp(90px, 20vw, 120px);
-  border-radius: 50%;
-  margin-bottom: 1rem;
-  opacity: 0.92;
-  transform: scale(0.95);
-  border: 3px solid var(--accent);
-  box-shadow: 0 0 24px #33bbff;
-  animation: fadeSlide 1s ease-out 0.5s forwards;
-}
-
-#about-overlay p {
-  opacity: 0;
-  transform: translateY(10px);
-  max-width: 90vw;
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  color: var(--text);
-  line-height: 1.55;
-  text-shadow: 0 0 4px #aaddff;
-  animation: fadeSlide 1s ease-out 0.9s forwards;
-  white-space: pre-wrap;
-}
-
-#continue-btn {
-  margin-top: 2rem;
-  padding: 0.6rem 1.3rem;
-  font-size: 1rem;
-  font-family: 'JetBrains Mono', monospace;
-  background-color: var(--accent);
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  animation: fadeSlide 1s ease-out 1.3s forwards;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-#continue-btn:hover {
-  background-color: #33bbff;
-  color: #fff;
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 @keyframes fadeSlide {
@@ -166,22 +87,12 @@ main {
   }
 }
 
-/* Metrics & Spark Fade In */
-#metrics-panel,
-#spark {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1s ease;
-}
-body.show-metrics #metrics-panel,
-body.show-metrics #spark {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
+h1, h2 {
+  color: #aaddff;
+  text-shadow: 0 0 6px rgba(102, 220, 255, 0.8);
+  animation: flicker 2.5s infinite;
 }
 
-/* Mobile Padding Fix */
 @media (max-width: 600px) {
   #navbar {
     flex-wrap: wrap;
@@ -193,12 +104,266 @@ body.show-metrics #spark {
     font-size: 0.9rem;
   }
 
-  #equation {
-    top: 8vh;
-    left: 5vw;
+  main {
+    padding: 1rem;
   }
+}
 
-  #about-overlay p {
-    padding: 0 1rem;
+
+/* ──────────────────────────────────────────────── */
+/*            PAGE-SPECIFIC STYLES                 */
+/* ──────────────────────────────────────────────── */
+
+
+/* === Home Page (Animation) === */
+main#animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#equation {
+  position: absolute;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(0.8rem, 1.6vw + 0.5rem, 1.5rem);
+  z-index: 1;
+  opacity: 0;
+  color: var(--text);
+  text-shadow: 0 0 4px #66ccff, 0 0 6px #33bbff;
+  animation: flicker 2s infinite;
+  transition: opacity 3s ease, filter 1.5s ease;
+}
+
+/* Fade equation when overlay is shown */
+body.about-active #equation {
+  opacity: 0 !important;
+  filter: blur(6px);
+}
+
+#about-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 10, 30, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 10;
+  padding: 20px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  text-align: center;
+}
+
+#about-overlay img {
+  width: 100px;
+  max-width: 20vw;
+  border-radius: 50%;
+  border: 3px solid var(--text);
+  box-shadow: 0 0 20px var(--border);
+  margin-bottom: 1rem;
+}
+
+#about-overlay p {
+  color: var(--text);
+  font-size: 0.9rem;
+  max-width: 400px;
+  white-space: pre-wrap;
+  text-shadow: 0 0 6px #aaddff;
+}
+
+#typewriter::after {
+  content: '|';
+  animation: blink 1.2s infinite;
+  color: #aaddff;
+}
+
+#continue-btn {
+  margin-top: 1.5rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  background-color: var(--text);
+  color: black;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  opacity: 0;
+  display: none;
+  transition: opacity 1s ease, background 0.3s ease;
+}
+
+#continue-btn:hover {
+  background-color: var(--border);
+  color: #fff;
+}
+
+
+/* === GitHub Page === */
+.profile-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.profile-section img {
+  width: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 15px var(--border);
+}
+
+.profile-text {
+  flex: 1 1 250px;
+}
+
+.profile-text h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw + 0.3rem, 1.6rem);
+  color: #ccf0ff;
+}
+
+.profile-text p {
+  margin: 0.4rem 0;
+  color: #d7f9ff;
+}
+
+.repo-card {
+  border: 1px solid #66ccff33;
+  border-radius: 10px;
+  padding: 1.3rem;
+  background: rgba(0, 20, 40, 0.75);
+  box-shadow: 0 2px 10px rgba(102, 204, 255, 0.2);
+  margin-bottom: 1.7rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.repo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(102, 204, 255, 0.3);
+}
+
+.repo-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.repo-card a {
+  text-decoration: none;
+  color: #99ddff;
+}
+
+.repo-card p {
+  margin: 0 0 0.8rem;
+  color: #cfefff;
+}
+
+.repo-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #b3e7ff;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+#contributions {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+#contributions img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #66ccff44;
+  filter: invert(0.9) hue-rotate(160deg) brightness(1.1);
+  box-shadow: 0 0 10px rgba(102, 204, 255, 0.2);
+}
+
+
+/* === CV & Posts & Research (Shared) === */
+main {
+  padding: 2rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+main h1 {
+  margin-bottom: 1.8rem;
+  font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
+  text-align: center;
+}
+
+iframe {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  border: 2px solid #88ccff22;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(102, 204, 255, 0.3);
+  background-color: #111;
+}
+
+@media (max-width: 600px) {
+  iframe {
+    height: 70vh;
+    min-height: 400px;
   }
+}
+
+/* Allow background animation to peek through everywhere */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: -1;
+  pointer-events: none;
+}
+
+main, #contributions, iframe, .profile-section, .repo-card, #about-overlay {
+  position: relative;
+  z-index: 1;
+}
+
+/* Add consistent padding to account for navbar */
+body:not(#animation) main {
+  padding-top: 80px;
+}
+
+canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  pointer-events: none;
 }

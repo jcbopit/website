@@ -5,190 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GitHub Projects – jcbopit</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding-top: 80px;
-      font-family: 'JetBrains Mono', monospace;
-      background: radial-gradient(ellipse at center, #001220 0%, #000000 100%);
-      color: #ddfaff;
-      line-height: 1.5;
-      overflow-x: hidden;
-    }
-
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 10, 30, 0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: clamp(1rem, 4vw, 2.5rem);
-      padding: 16px 0;
-      z-index: 1000;
-      border-bottom: 2px solid rgba(102, 204, 255, 0.4);
-      box-shadow: 0 0 14px rgba(51, 160, 255, 0.3);
-      backdrop-filter: blur(6px);
-      animation: glowPulse 4s infinite ease-in-out;
-      flex-wrap: wrap;
-    }
-
-    #navbar a {
-      color: #66ccff;
-      text-decoration: none;
-      font-size: clamp(0.9rem, 1vw + 0.5rem, 1.2rem);
-      font-weight: 800;
-      text-shadow: 0 0 5px #33bbff;
-      transition: color 0.3s ease, text-shadow 0.3s ease;
-      white-space: nowrap;
-    }
-
-    #navbar a:hover {
-      color: #ffffff;
-      text-shadow: 0 0 10px #aaddff, 0 0 22px #66ccff;
-    }
-
-    @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 14px rgba(51, 160, 255, 0.3); }
-      50% { box-shadow: 0 0 28px rgba(102, 220, 255, 0.75); }
-    }
-
-    h1, h2 {
-      color: #aaddff;
-      text-shadow: 0 0 6px rgba(102, 220, 255, 0.8);
-      animation: flicker 2.5s infinite;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 0.95; text-shadow: 0 0 5px #88dfff; }
-      25% { opacity: 1; text-shadow: 0 0 8px #aaddff; }
-      50% { opacity: 0.92; text-shadow: 0 0 6px #66ccff; }
-      75% { opacity: 0.98; text-shadow: 0 0 8px #99eeff; }
-      100% { opacity: 1; text-shadow: 0 0 9px #bbf0ff; }
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 920px;
-      margin: 0 auto;
-    }
-
-    .profile-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      align-items: center;
-      margin-bottom: 2.5rem;
-    }
-
-    .profile-section img {
-      width: 130px;
-      border-radius: 50%;
-      border: 3px solid #66ccff;
-      box-shadow: 0 0 15px #33bbff;
-    }
-
-    .profile-text {
-      flex: 1 1 250px;
-    }
-
-    .profile-text h2 {
-      margin: 0;
-      font-size: clamp(1.2rem, 2vw + 0.3rem, 1.6rem);
-      color: #ccf0ff;
-    }
-
-    .profile-text p {
-      margin: 0.4rem 0;
-      color: #d7f9ff;
-    }
-
-    .repo-card {
-      border: 1px solid #66ccff33;
-      border-radius: 10px;
-      padding: 1.3rem;
-      background: rgba(0, 20, 40, 0.75);
-      box-shadow: 0 2px 10px rgba(102, 204, 255, 0.2);
-      margin-bottom: 1.7rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .repo-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 20px rgba(102, 204, 255, 0.3);
-    }
-
-    .repo-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-    }
-
-    .repo-card a {
-      text-decoration: none;
-      color: #99ddff;
-    }
-
-    .repo-card p {
-      margin: 0 0 0.8rem;
-      color: #cfefff;
-    }
-
-    .repo-meta {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      font-size: 0.9rem;
-      color: #b3e7ff;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    #contributions {
-      margin: 3rem 0;
-      text-align: center;
-    }
-
-    #contributions img {
-      max-width: 100%;
-      border-radius: 8px;
-      border: 1px solid #66ccff44;
-      filter: invert(0.9) hue-rotate(160deg) brightness(1.1);
-      box-shadow: 0 0 10px rgba(102, 204, 255, 0.2);
-    }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 1rem;
-      }
-
-      .profile-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .profile-text h2 {
-        font-size: 1.3rem;
-      }
-
-      .repo-card {
-        padding: 1rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -222,6 +39,8 @@
       <img src="https://ghchart.rshah.org/jcbopit" alt="GitHub Contribution Graph">
     </div>
   </main>
+  
+
 
   <script>
     async function loadProfileAndRepos() {
@@ -281,5 +100,6 @@
 
     window.onload = loadProfileAndRepos;
   </script>
+  
 </body>
 </html>

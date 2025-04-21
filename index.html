@@ -3,165 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Epicycle Terminal</title>
+  <title>Justin Offutt</title>
 
   <!-- Fonts & KaTeX -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
 
   <!-- p5.js -->
   <script src="libraries/p5.min.js"></script>
   <script src="libraries/p5.sound.min.js"></script>
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: #000;
-      font-family: 'JetBrains Mono', monospace;
-      color: #e0f9ff;
-    }
-
-    main#animation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-    }
-
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 16px 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      gap: clamp(1rem, 4vw, 2.5rem);
-      background: rgba(0, 10, 30, 0.8);
-      border-bottom: 2px solid #88ccff;
-      box-shadow: 0 0 20px #33bbff, 0 0 60px #88ccff;
-      backdrop-filter: blur(6px);
-      animation: navbarGlow 6s ease-in-out infinite;
-      flex-wrap: wrap;
-      overflow-x: auto;
-    }
-
-    #navbar a {
-      color: #88ccff;
-      text-decoration: none;
-      font-size: clamp(0.9rem, 1.2vw + 0.4rem, 1.15rem);
-      font-weight: 800;
-      text-shadow: 0 0 6px #33bbff, 0 0 12px #66ddff;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    #navbar a:hover {
-      color: #ffffff;
-      text-shadow: 0 0 10px #aaddff, 0 0 25px #66ccff;
-    }
-
-    @keyframes navbarGlow {
-      0%, 100% { box-shadow: 0 0 20px #33bbff, 0 0 60px #88ccff; }
-      50% { box-shadow: 0 0 30px #aaddff, 0 0 90px #66ccff; }
-    }
-
-    #equation {
-      position: absolute;
-      top: 10vh;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: clamp(0.8rem, 1.6vw + 0.5rem, 1.5rem);
-      z-index: 5;
-      opacity: 0;
-      color: #e6faff;
-      text-shadow: 0 0 4px #66ccff, 0 0 6px #33bbff;
-      animation: flicker 2.5s infinite;
-      transition: opacity 3s ease;
-    }
-
-    @keyframes flicker {
-      0%, 100% { opacity: 1; text-shadow: 0 0 4px #66ccff; }
-      50% { opacity: 0.85; text-shadow: 0 0 8px #aaddff; }
-    }
-
-    #about-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 10, 30, 0.6);
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 10;
-      padding: 20px;
-      box-sizing: border-box;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 2s ease;
-      text-align: center;
-    }
-
-    #about-overlay img {
-      width: 100px;
-      max-width: 20vw;
-      border-radius: 50%;
-      border: 3px solid #66ccff;
-      box-shadow: 0 0 20px #33bbff;
-      margin-bottom: 1rem;
-    }
-
-    #about-overlay p {
-      color: #e0f9ff;
-      font-size: 0.9rem;
-      max-width: 400px;
-      white-space: pre-wrap;
-      text-shadow: 0 0 6px #aaddff;
-    }
-
-    #typewriter::after {
-      content: '|';
-      animation: blink 1.2s infinite;
-      color: #aaddff;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    #continue-btn {
-      margin-top: 1.5rem;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      background-color: #66ccff;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      font-family: 'JetBrains Mono', monospace;
-      cursor: pointer;
-      opacity: 0;
-      display: none;
-      transition: opacity 1s ease, background 0.3s ease;
-    }
-
-    #continue-btn:hover {
-      background-color: #33bbff;
-      color: #fff;
-    }
-  </style>
 </head>
 
 <body>
