@@ -11,6 +11,7 @@
   --card-bg: #0a141e;
   --border: #6ebaff;
   --glow: #9cdcff;
+  --click: #b0e5ff;
 }
 
 html, body {
@@ -208,7 +209,7 @@ body.about-active #equation {
 }
 
 #continue-btn:hover {
-  background-color: var(--border);
+  background-color: var(--click);
   color: #fff;
 }
 
