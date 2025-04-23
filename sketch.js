@@ -40,11 +40,12 @@ function setup() {
   document.getElementById("continue-btn").addEventListener("click", () => {
     document.getElementById("about-overlay").style.opacity = "0";
     document.getElementById("about-overlay").style.pointerEvents = "none";
-    document.getElementById("equation").style.opacity = "1";
+
     continueClicked = true;
     usingIntroAnimation = false;
     resetCamera();
   });
+  
 
   for (let i = 0; i < numBoids; i++) {
     boids.push(new Boid(random(width), random(height)));
@@ -174,7 +175,8 @@ function draw() {
 
   pop();
   t += 0.00035 * (usingIntroAnimation ? 0.15 : 1);
-  renderEquation();
+  if (continueClicked && hasSnapped) {
+  }
 }
 
 function drawParallaxStars() {
@@ -308,22 +310,6 @@ function drawArrow(x1, y1, x2, y2, size) {
   pop();
 }
 
-function renderEquation() {
-  const eq = String.raw`
-    \vec{r}(t) = \sum_{i=0}^{n-1} A_i \cdot
-    \begin{bmatrix}
-    \cos(2\pi f_i t + \phi) \\
-    \sin(2\pi f_i t + \phi)
-    \end{bmatrix}
-  `;
-  const eqElement = document.getElementById("equation");
-  if (window.katex && eqElement) {
-    katex.render(eq, eqElement, {
-      throwOnError: false,
-      displayMode: true
-    });
-  }
-}
 
 function resetCamera() {
   hasSnapped = false;
@@ -335,7 +321,6 @@ function showAboutOverlay() {
   const overlay = document.getElementById("about-overlay");
   overlay.style.opacity = "1";
   overlay.style.pointerEvents = "auto";
-  document.getElementById("equation").style.opacity = "0";
 }
 
 function windowResized() {
